@@ -21,7 +21,7 @@ from bentoml.io import JSON
 from bentoml.io import Text
 
 class Llama2(bentoml.Runnable):
-    SUPPORTED_RESOURCES = ("gpu",)
+    SUPPORTED_RESOURCES = ("nvidia.com/gpu",)
     SUPPORTS_CPU_MULTI_THREADING = False
 
     def __init__(self):
