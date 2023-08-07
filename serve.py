@@ -1,3 +1,4 @@
+from __future__ import annotations
 from transformers import AutoModelForCausalLM
 from peft import PeftModel, PeftConfig
 import torch
@@ -9,7 +10,6 @@ from tqdm import tqdm
 from transformers import LlamaForCausalLM, LlamaTokenizer
 from peft import LoraConfig, TaskType, get_peft_model
 import bentoml
-from __future__ import annotations
 
 import time
 import typing as t
