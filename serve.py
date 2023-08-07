@@ -50,7 +50,7 @@ llama2_runner = t.cast(
     "RunnerImpl", bentoml.Runner(Llama2, name="llama2")
 )
 
-svc = bentoml.Service('serve llama2', runners=[llama2_runner])
+svc = bentoml.Service('serve_llama2', runners=[llama2_runner])
 @svc.api(input=bentoml.io.Text(), output=bentoml.io.JSON())
 async def infer(text: str) -> str:
     result = await llama2_runner.generate.async_run(text)
