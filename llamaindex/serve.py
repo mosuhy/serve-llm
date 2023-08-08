@@ -8,7 +8,7 @@ import bentoml
 from typing import List, Any
 
 from llama_index import ServiceContext, SimpleDirectoryReader, VectorStoreIndex
-from llama_index.llms import CustomLLM, CompletionResponse, CompletionResponseGen, LLMMetadata, llm_callback
+from llama_index.llms import CustomLLM, CompletionResponse, CompletionResponseGen, LLMMetadata
 from InstructorEmbedding import INSTRUCTOR
 from llama_index.embeddings.base import BaseEmbedding
 
@@ -32,7 +32,6 @@ class Llama2Model(CustomLLM):
         """Get LLM metadata."""
         return LLMMetadata(name="custom-llama2")
 
-    @llm_callback()
     def complete(self, prompt: str, **kwargs: Any) -> CompletionResponse:
         prompt_length = len(prompt)
         tokenized = self.tokenizer(prompt)
@@ -42,7 +41,6 @@ class Llama2Model(CustomLLM):
         result = self.tokenizer.batch_decode(outputs, skip_special_tokens=True)[0]
         return CompletionResponse(text=result)
 
-    @llm_callback()
     def stream_complete(self, prompt: str, **kwargs: Any) -> CompletionResponseGen:
         raise NotImplementedError()
 
