@@ -3,8 +3,6 @@ from peft import PeftModel, PeftConfig
 import torch
 import os
 from transformers import AutoTokenizer
-from transformers import LlamaForCausalLM, LlamaTokenizer
-from peft import LoraConfig, TaskType, get_peft_model
 import bentoml
 
 import time
@@ -19,7 +17,7 @@ from bentoml.io import Text
 import torch
 from typing import Optional, List, Mapping, Any
 
-from llama_index import ServiceContext, SimpleDirectoryReader, LangchainEmbedding, ListIndex
+from llama_index import ServiceContext, SimpleDirectoryReader
 from llama_index import ServiceContext, SimpleDirectoryReader, VectorStoreIndex
 from llama_index.llms import CustomLLM, CompletionResponse, CompletionResponseGen, LLMMetadata, llm_callback
 
@@ -106,7 +104,6 @@ class LlamaIndex(bentoml.Runnable):
 
 
 llamaindex_runner = t.cast("RunnerImpl", bentoml.Runner(LlamaIndex, name="llamaindex"))
-
 svc = bentoml.Service("llamaindex", runners=[llamaindex_runner])
 
 
