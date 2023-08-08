@@ -20,7 +20,7 @@ class Llama2Model(CustomLLM):
         max_memory = {0: "80GIB", 1: "80GIB", "cpu": "30GB"}
         config = PeftConfig.from_pretrained(peft_model_id)
         model = AutoModelForCausalLM.from_pretrained(config.base_model_name_or_path, device_map="auto", torch_dtype=torch.float16)
-        model = PeftModel.from_pretrained(model, peft_model_id, device_map="auto", max_memory=max_memory)
+        # model = PeftModel.from_pretrained(model, peft_model_id, device_map="auto", max_memory=max_memory)
         model.eval()
         self.model = model
         tokenizer = AutoTokenizer.from_pretrained(config.base_model_name_or_path, legacy=False)
