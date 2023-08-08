@@ -43,8 +43,8 @@ class Llama2(bentoml.Runnable):
         tokenized = self.tokenizer(input_text)
         tokenized["input_ids"] = torch.tensor(tokenized["input_ids"]).unsqueeze(0)
         tokenized["attention_mask"] = torch.ones(tokenized["input_ids"].size(1)).unsqueeze(0)
-        outputs = model.generate(input_ids=tokenized["input_ids"], max_new_tokens=1024, attention_mask=tokenized["attention_mask"])
-        result = tokenizer.batch_decode(outputs, skip_special_tokens=True)[0]
+        outputs = self.model.generate(input_ids=tokenized["input_ids"], max_new_tokens=1024, attention_mask=tokenized["attention_mask"])
+        result = self.tokenizer.batch_decode(outputs, skip_special_tokens=True)[0]
         return result
 llama2_runner = t.cast(
     "RunnerImpl", bentoml.Runner(Llama2, name="llama2")
