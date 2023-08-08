@@ -1,25 +1,16 @@
+from __future__ import annotations
 from transformers import AutoModelForCausalLM
 from peft import PeftModel, PeftConfig
 import torch
-import os
 from transformers import AutoTokenizer
-import bentoml
-
-import time
 import typing as t
-from typing import TYPE_CHECKING
-
-
 import bentoml
-from bentoml.io import JSON
-from bentoml.io import Text
+from typing import List, Any
 
-import torch
-from typing import Optional, List, Mapping, Any
-
-from llama_index import ServiceContext, SimpleDirectoryReader
 from llama_index import ServiceContext, SimpleDirectoryReader, VectorStoreIndex
 from llama_index.llms import CustomLLM, CompletionResponse, CompletionResponseGen, LLMMetadata, llm_callback
+from InstructorEmbedding import INSTRUCTOR
+from llama_index.embeddings.base import BaseEmbedding
 
 # custom LLM class for llamaindex
 class Llama2Model(CustomLLM):
@@ -54,11 +45,6 @@ class Llama2Model(CustomLLM):
     @llm_callback()
     def stream_complete(self, prompt: str, **kwargs: Any) -> CompletionResponseGen:
         raise NotImplementedError()
-
-
-from typing import Any, List
-from InstructorEmbedding import INSTRUCTOR
-from llama_index.embeddings.base import BaseEmbedding
 
 
 class InstructorEmbeddings(BaseEmbedding):
@@ -104,7 +90,7 @@ class LlamaIndex(bentoml.Runnable):
 
 
 llamaindex_runner = t.cast("RunnerImpl", bentoml.Runner(LlamaIndex, name="llamaindex"))
-svc = bentoml.Service("llamaindex", runners=[llamaindex_runner])
+svc = bentoml.Service("llamaindex_service", runners=[llamaindex_runner])
 
 
 @svc.api(input=bentoml.io.Text(), output=bentoml.io.JSON())
