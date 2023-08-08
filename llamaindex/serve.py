@@ -15,7 +15,6 @@ from llama_index.embeddings.base import BaseEmbedding
 # custom LLM class for llamaindex
 class Llama2Model(CustomLLM):
     def __init__(self):
-        super().__init__()
         peft_model_id = "/ckpt/"
         max_memory = {0: "80GIB", 1: "80GIB", "cpu": "30GB"}
         config = PeftConfig.from_pretrained(peft_model_id)
