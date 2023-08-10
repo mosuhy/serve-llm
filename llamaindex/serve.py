@@ -15,14 +15,12 @@ from llama_index.embeddings.base import BaseEmbedding
 # custom LLM class for llamaindex
 class Llama2Model(CustomLLM):
     def __init__(self):
-        peft_model_id = "/ckpt/"
         max_memory = {0: "80GIB", 1: "80GIB", "cpu": "30GB"}
-        config = PeftConfig.from_pretrained(peft_model_id)
-        model = AutoModelForCausalLM.from_pretrained(config.base_model_name_or_path, device_map="auto", torch_dtype=torch.float16)
+        model = AutoModelForCausalLM.from_pretrained('data/llama2-7b-hf', device_map="auto", torch_dtype=torch.float16)
         # model = PeftModel.from_pretrained(model, peft_model_id, device_map="auto", max_memory=max_memory)
         model.eval()
         self.model = model
-        tokenizer = AutoTokenizer.from_pretrained(config.base_model_name_or_path, legacy=False)
+        tokenizer = AutoTokenizer.from_pretrained('data/llama2-7b-hf', legacy=False)
         tokenizer.pad_token = tokenizer.unk_token
         self.tokenizer = tokenizer
 
