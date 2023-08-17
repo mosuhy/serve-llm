@@ -15,7 +15,6 @@ from llama_index.embeddings.base import BaseEmbedding
 # custom LLM class for llamaindex
 class Llama2Model(CustomLLM):
     def __init__(self):
-        max_memory = {0: "80GIB", 1: "80GIB", "cpu": "30GB"}
         model = AutoModelForCausalLM.from_pretrained('/data/llama-2-7b-hf', device_map="auto", torch_dtype=torch.float16)
         # model = PeftModel.from_pretrained(model, peft_model_id, device_map="auto", max_memory=max_memory)
         model.eval()
@@ -34,7 +33,7 @@ class Llama2Model(CustomLLM):
         tokenized = self.tokenizer(prompt)
         tokenized["input_ids"] = torch.tensor(tokenized["input_ids"]).unsqueeze(0).to("cuda")
         tokenized["attention_mask"] = torch.ones(tokenized["input_ids"].size(1)).unsqueeze(0).to("cuda")
-        outputs = self.model.generate(input_ids=tokenized["input_ids"], max_new_tokens=1024, attention_mask=tokenized["attention_mask"])
+        outputs = self.model.generate(input_ids=tokenized["input_ids"], max_new_tokens=512, attention_mask=tokenized["attention_mask"])
         result = self.tokenizer.batch_decode(outputs, skip_special_tokens=True)[0]
         return CompletionResponse(text=result)
 
@@ -71,8 +70,8 @@ class LlamaIndex(bentoml.Runnable):
     SUPPORTS_CPU_MULTI_THREADING = False
 
     def __init__(self):
-        context_window = 2048
-        num_output = 1024
+        context_window = 512
+        num_output = 512
         documents = SimpleDirectoryReader("/docs/vessl-docs-dataset/").load_data()
         llm = Llama2Model()
         service_context = ServiceContext.from_defaults(llm=llm, context_window=context_window, num_output=num_output, embed_model=InstructorEmbeddings(embed_batch_size=2), chunk_size=512)
