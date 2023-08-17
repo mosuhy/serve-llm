@@ -33,7 +33,7 @@ class Llama2Model(CustomLLM):
         tokenized = self.tokenizer(prompt)
         tokenized["input_ids"] = torch.tensor(tokenized["input_ids"]).unsqueeze(0).to("cuda")
         tokenized["attention_mask"] = torch.ones(tokenized["input_ids"].size(1)).unsqueeze(0).to("cuda")
-        outputs = self.model.generate(input_ids=tokenized["input_ids"], max_new_tokens=512, attention_mask=tokenized["attention_mask"])
+        outputs = self.model.generate(input_ids=tokenized["input_ids"], max_new_tokens=256, attention_mask=tokenized["attention_mask"])
         result = self.tokenizer.batch_decode(outputs, skip_special_tokens=True)[0]
         return CompletionResponse(text=result)
 
@@ -70,11 +70,11 @@ class LlamaIndex(bentoml.Runnable):
     SUPPORTS_CPU_MULTI_THREADING = False
 
     def __init__(self):
-        context_window = 256
+        context_window = 1024
         num_output = 256
         documents = SimpleDirectoryReader("/docs/vessl-docs-dataset/").load_data()
         llm = Llama2Model()
-        service_context = ServiceContext.from_defaults(llm=llm, context_window=context_window, num_output=num_output, embed_model=InstructorEmbeddings(embed_batch_size=4), chunk_size=256)
+        service_context = ServiceContext.from_defaults(llm=llm, context_window=context_window, num_output=num_output, embed_model=InstructorEmbeddings(embed_batch_size=2), chunk_size=256)
         self.index = VectorStoreIndex.from_documents(documents, service_context=service_context)
 
     @bentoml.Runnable.method(batchable=False)
