@@ -30,11 +30,15 @@ class Llama2Model(CustomLLM):
 
     def complete(self, prompt: str, **kwargs: Any) -> CompletionResponse:
         prompt_length = len(prompt)
+        print('===== prompt =====')
+        print(prompt)
         tokenized = self.tokenizer(prompt)
         tokenized["input_ids"] = torch.tensor(tokenized["input_ids"]).unsqueeze(0).to("cuda")
         tokenized["attention_mask"] = torch.ones(tokenized["input_ids"].size(1)).unsqueeze(0).to("cuda")
         outputs = self.model.generate(input_ids=tokenized["input_ids"], max_new_tokens=256, attention_mask=tokenized["attention_mask"])
         result = self.tokenizer.batch_decode(outputs, skip_special_tokens=True)[0]
+        print('===== result =====')
+        print(result)
         return CompletionResponse(text=result)
 
     def stream_complete(self, prompt: str, **kwargs: Any) -> CompletionResponseGen:
