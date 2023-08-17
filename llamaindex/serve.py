@@ -70,11 +70,11 @@ class LlamaIndex(bentoml.Runnable):
     SUPPORTS_CPU_MULTI_THREADING = False
 
     def __init__(self):
-        context_window = 512
-        num_output = 512
+        context_window = 256
+        num_output = 256
         documents = SimpleDirectoryReader("/docs/vessl-docs-dataset/").load_data()
         llm = Llama2Model()
-        service_context = ServiceContext.from_defaults(llm=llm, context_window=context_window, num_output=num_output, embed_model=InstructorEmbeddings(embed_batch_size=4), chunk_size=512)
+        service_context = ServiceContext.from_defaults(llm=llm, context_window=context_window, num_output=num_output, embed_model=InstructorEmbeddings(embed_batch_size=4), chunk_size=256)
         self.index = VectorStoreIndex.from_documents(documents, service_context=service_context)
 
     @bentoml.Runnable.method(batchable=False)
