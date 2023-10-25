@@ -6,7 +6,6 @@ from transformers import AutoTokenizer
 import typing as t
 import bentoml
 from typing import List, Any
-from pydantic import BaseModel, ValidationError, Extra
 
 from llama_index import ServiceContext, SimpleDirectoryReader, VectorStoreIndex
 from llama_index.llms import CustomLLM, CompletionResponse, CompletionResponseGen, LLMMetadata
